@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: gitpod/workspace-postgres:commit-409e1707b3cbe6752a894893cd6354fc13d7b8f5
     strategy:
       matrix:
         node-version: [14.x]

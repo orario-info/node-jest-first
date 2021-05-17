@@ -1,0 +1,50 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: PostgreSQL example1
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  # コンテナジョブのラベル
+  container-job:
+    # コンテナはLinuxベースのオペレーティングシステム内で実行しなければならない
+    runs-on: ubuntu-latest
+    # `container-job`が実行されるDocker Hubのイメージ
+    container: node:10.18-jessie
+
+    # `container-job`と実行されるサービスコンテナ
+    services:
+      # サービスコンテナへのアクセスに使われるラベル
+      postgres:
+        # Docker Hubのイメージ
+        image: postgres
+        # postgresのパスワードを提供
+        env:
+          POSTGRES_PASSWORD: postgres
+        # postgresが起動するまで待つヘルスチェックの設定
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      # CIテストの実行前にリポジトリからコードのコピーをダウンロード
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      # `package.json`ファイル内のすべての依存関係のクリーンインストールを実行
+      # 詳しい情報についてはhttps://docs.npmjs.com/cli/ci.htmlを参照
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Connect to PostgreSQL
+
+        env:
+          # PostgreSQLサービスコンテナとの通信に使われるホスト名
+          POSTGRES_HOST: postgres
+          # デフォルトのPostgreSQLポート
+          POSTGRES_PORT: 5432

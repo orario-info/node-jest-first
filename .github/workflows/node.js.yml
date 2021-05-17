@@ -8,23 +8,34 @@ on:
     branches: [ main ]
 
 jobs:
-  # コンテナジョブのラベル
-  container-job:
-    # コンテナはLinuxベースのオペレーティングシステム内で実行しなければならない
+  # label of the container job
+  postgres-job:
+    # containers must run in Linux based operating systems
     runs-on: ubuntu-latest
-    # `container-job`が実行されるDocker Hubのイメージ
-    container: node:10.18-jessie
+    # Docker Hub image that `postgres-job` executes in
+    container: node:latest
 
-    # `container-job`と実行されるサービスコンテナ
+    # service containers to run with `postgres-job`
     services:
-      # サービスコンテナへのアクセスに使われるラベル
+      # label used to access the service container
       postgres:
-        # Docker Hubのイメージ
-        image: postgres
-        # postgresのパスワードを提供
+        # Docker Hub image
+        image: postgres:latest
+        # service environment variables
+        # `POSTGRES_HOST` is `postgres`
         env:
-          POSTGRES_PASSWORD: postgres
-        # postgresが起動するまで待つヘルスチェックの設定
+          # optional (defaults to `postgres`)
+          POSTGRES_DB: postgres_db
+          # required
+          POSTGRES_PASSWORD: postgres_password
+          # optional (defaults to `5432`)
+          POSTGRES_PORT: 5432
+          # optional (defaults to `postgres`)
+          POSTGRES_USER: postgres_user
+        ports:
+          # maps tcp port 5432 on service container to the host
+          - 5432:5432
+        # set health checks to wait until postgres has started
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -32,19 +43,15 @@ jobs:
           --health-retries 5
 
     steps:
-      # CIテストの実行前にリポジトリからコードのコピーをダウンロード
-      - name: Check out repository code
-        uses: actions/checkout@v2
+      - name: Install PostgreSQL client
+        run: |
+          apt-get update
+          apt-get install --yes postgresql-client
 
-      # `package.json`ファイル内のすべての依存関係のクリーンインストールを実行
-      # 詳しい情報についてはhttps://docs.npmjs.com/cli/ci.htmlを参照
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Connect to PostgreSQL
-
+      # queries database with postgres client
+      - name: Query database
+        run: psql -h postgres -d postgres_db -U postgres_user -c 'SELECT 1;'
         env:
-          # PostgreSQLサービスコンテナとの通信に使われるホスト名
-          POSTGRES_HOST: postgres
-          # デフォルトのPostgreSQLポート
-          POSTGRES_PORT: 5432
+          # postgress password is required; alternatively, you can run:
+          # `PGPASSWORD=postgres_password psql ...`
+          PGPASSWORD: postgres_password

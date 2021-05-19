@@ -27,11 +27,11 @@ jobs:
           # optional (defaults to `postgres`)
           POSTGRES_DB: postgres_db
           # required
-          POSTGRES_PASSWORD: postgres_password
+          POSTGRES_PASSWORD: postgres
           # optional (defaults to `5432`)
           POSTGRES_PORT: 5432
           # optional (defaults to `postgres`)
-          POSTGRES_USER: postgres_user
+          POSTGRES_USER: postgres
         ports:
           # maps tcp port 5432 on service container to the host
           - 5432:5432
@@ -50,7 +50,7 @@ jobs:
 
       # queries database with postgres client
       - name: Query database
-        run: psql -h postgres -d postgres_db -U postgres_user -c 'SELECT 1;'
+        run: psql -h postgres -d postgres_db -U postgres -c 'SELECT 1;'
       - name: node Version
         run: node --version
         env:

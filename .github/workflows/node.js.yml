@@ -20,18 +20,18 @@ jobs:
       # label used to access the service container
       postgres:
         # Docker Hub image
-        image: postgres:latest
-     #   # service environment variables
-     #   # `POSTGRES_HOST` is `postgres`
-     #   env:
-     #     # optional (defaults to `postgres`)
-     #     POSTGRES_DB: postgres_db
-     #     # required
-     #     POSTGRES_PASSWORD: postgres
-     #     # optional (defaults to `5432`)
-     #     POSTGRES_PORT: 5432
-     #     # optional (defaults to `postgres`)
-     #     POSTGRES_USER: postgres
+        image: postgres:12.6
+        # service environment variables
+        # `POSTGRES_HOST` is `postgres`
+        env:
+          # optional (defaults to `postgres`)
+          POSTGRES_DB: postgres_db
+          # required
+          POSTGRES_PASSWORD: postgres_pass
+          # optional (defaults to `5432`)
+          POSTGRES_PORT: 5432
+          # optional (defaults to `postgres`)
+          POSTGRES_USER: postgres_user
         ports:
           # maps tcp port 5432 on service container to the host
           - 5432:5432
@@ -50,10 +50,10 @@ jobs:
 
       # queries database with postgres client
       - name: Query database
-        run: psql -h postgres -d postgres_db -U postgres -c 'SELECT 1;'
+        run: psql -h postgres -d postgres_db -U postgres_user -c 'SELECT 1;'
       - name: node Version
         run: node --version
         env:
           # postgress password is required; alternatively, you can run:
           # `PGPASSWORD=postgres_password psql ...`
-          PGPASSWORD: postgres
+          PGPASSWORD: postgres_pass

@@ -53,3 +53,5 @@ jobs:
           # postgress password is required; alternatively, you can run:
           # `PGPASSWORD=postgres_password psql ...`
           PGPASSWORD: postgres_password
+      - name: node version
+        run: node --version

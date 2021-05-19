@@ -48,6 +48,8 @@ jobs:
           apt-get update
           apt-get install --yes postgresql-client
 
+      - name: Postgres Pass File
+        run: echo 'postgres:5432:public:postgres_user:postgres_pass' > .pgpass
       # queries database with postgres client
       - name: Query database
         run: psql -h postgres -d postgres_db -U postgres_user -c 'SELECT 1;'

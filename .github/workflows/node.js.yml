@@ -11,7 +11,7 @@ jobs:
   # label of the container job
   postgres-job:
     # containers must run in Linux based operating systems
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     # Docker Hub image that `postgres-job` executes in
     container: node:14.16.1
 
@@ -41,18 +41,14 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-
     steps:
       - name: Install PostgreSQL client
         run: |
           apt-get update
           apt-get install --yes postgresql-client
-
       # queries database with postgres client
       - name: Query database
         run: psql -h postgres -d postgres_db -U postgres_user -c 'SELECT 1;'
-      - name: node Version
-        run: node --version
         env:
           # postgress password is required; alternatively, you can run:
           # `PGPASSWORD=postgres_password psql ...`

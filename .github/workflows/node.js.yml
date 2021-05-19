@@ -53,9 +53,6 @@ jobs:
         env:
           PGPASSWORD: gitpod
 
-      - name: aaa
-        run: psql -h postgres -d postgres_db -U gitpod -c 'SELECT 3;'
-          && psql -h postgres -d postgres_db -U gitpod -c 'SELECT 4;'
-
-   #   - name: node version
-   #     uses: actions/checkout@v2
+      - name: checkout main
+      - uses: actions/checkout@v2
+      - run:  ls

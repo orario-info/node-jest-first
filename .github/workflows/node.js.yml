@@ -42,17 +42,20 @@ jobs:
           --health-timeout 5s
           --health-retries 5
     steps:
-      - name: インストール PostgreSQL client
+      - name: Install PostgreSQL client
         run: |
           apt-get update
           apt-get install --yes postgresql-client
-      # queries database with postgres client
+      
       - name: Query database
         run: psql -h postgres -d postgres_db -U gitpod -c 'SELECT 1;'
           && psql -h postgres -d postgres_db -U gitpod -c 'SELECT 2;'
         env:
-          # postgress password is required; alternatively, you can run:
-          # `PGPASSWORD=postgres_password psql ...`
           PGPASSWORD: gitpod
-      - name: node version
-        run: node --version
+
+      - name: aaa
+        run: psql -h postgres -d postgres_db -U gitpod -c 'SELECT 3;'
+          && psql -h postgres -d postgres_db -U gitpod -c 'SELECT 4;'
+
+   #   - name: node version
+   #     uses: actions/checkout@v2

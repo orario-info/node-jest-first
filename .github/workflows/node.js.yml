@@ -27,7 +27,7 @@ jobs:
           # optional (defaults to `postgres`)
           POSTGRES_DB: postgres_db
           # required
-          POSTGRES_PASSWORD: postgres_password
+          POSTGRES_PASSWORD: gitpod
           # optional (defaults to `5432`)
           POSTGRES_PORT: 5432
           # optional (defaults to `postgres`)
@@ -52,6 +52,6 @@ jobs:
         env:
           # postgress password is required; alternatively, you can run:
           # `PGPASSWORD=postgres_password psql ...`
-          PGPASSWORD: postgres_password
+          PGPASSWORD: gitpod
       - name: node version
         run: node --version

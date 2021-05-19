@@ -31,7 +31,7 @@ jobs:
           # optional (defaults to `5432`)
           POSTGRES_PORT: 5432
           # optional (defaults to `postgres`)
-          POSTGRES_USER: postgres_user
+          POSTGRES_USER: gitpod
         ports:
           # maps tcp port 5432 on service container to the host
           - 5432:5432
@@ -48,8 +48,8 @@ jobs:
           apt-get install --yes postgresql-client
       # queries database with postgres client
       - name: Query database
-        run: psql -h postgres -d postgres_db -U postgres_user -c 'SELECT 1;'
-          && psql -h postgres -d postgres_db -U postgres_user -c 'SELECT 2;'
+        run: psql -h postgres -d postgres_db -U gitpod -c 'SELECT 1;'
+          && psql -h postgres -d postgres_db -U gitpod -c 'SELECT 2;'
         env:
           # postgress password is required; alternatively, you can run:
           # `PGPASSWORD=postgres_password psql ...`
